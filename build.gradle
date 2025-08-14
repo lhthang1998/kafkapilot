@@ -1,3 +1,5 @@
+import java.time.Duration
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.4'
@@ -23,12 +25,18 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	implementation(
+			'org.springframework.boot:spring-boot-starter-web',
+			'org.springframework.cloud:spring-cloud-starter-config',
+			'org.springframework.cloud:spring-cloud-starter-bootstrap',
+			"org.projectlombok:lombok:1.18.24"
+	)
 
+	testImplementation(
+			'org.springframework.boot:spring-boot-starter-test',
+			"org.junit.jupiter:junit-jupiter-api:5.12.2",
+	)
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -40,4 +48,28 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+componentTest {
+	dependsOn startTestEnvironment
+	finalizedBy stopTestEnvironment
+	dependsOn(tasks.startTestEnvironment)
+}
+
+
+startTestEnvironment {
+	dependsOn += ['composeUp']
+}
+
+stopTestEnvironment {
+	dependsOn += ['composeUp']
+}
+
+dockerCompose {
+	useComposeFiles = ['src/test/resources/docker/docker-compose.yml']
+	dockerComposeStopTimeout = Duration.of(120)
+	checkContainersRunning = false
+	executable = "docker-compose"
+	dockerExecutable = "docker"
+	useDockerComposeV2 = true
 }
