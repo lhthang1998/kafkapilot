@@ -53,13 +53,13 @@ dependencyManagement {
 
 apply plugin: 'docker-compose'
 
-tasks.named('test') {
+tasks.named('test', Test.class) {
 	include "**/unit/**"
-	useJUnitPlatform()
 
 	testLogging {
 		events 'passed', 'skipped', 'failed'
 	}
+	useJUnitPlatform()
 }
 
 tasks.register('startTestEnvironment') {
@@ -71,10 +71,19 @@ tasks.register('stopTestEnvironment') {
 }
 
 tasks.register('componentTest', Test.class) {
+	minHeapSize = "1024m"
+	maxHeapSize = "2048m"
+
 	include "**/component/**"
 	description = "Run component test"
 	dependsOn tasks.startTestEnvironment
+
+	//will docker-compose down
 	finalizedBy tasks.stopTestEnvironment
+
+	testLogging {
+		events 'passed', 'skipped', 'failed'
+	}
 	useJUnitPlatform()
 }
 
@@ -98,6 +107,9 @@ tasks.register('blackboxTest', Test.class) {
 	mustRunAfter tasks.componentTest
 
 	finalizedBy tasks.stopApp
+	testLogging {
+		events 'passed', 'skipped', 'failed'
+	}
 	useJUnitPlatform()
 }
 
