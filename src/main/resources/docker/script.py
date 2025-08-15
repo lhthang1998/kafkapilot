@@ -1,12 +1,14 @@
+import json
 import logging
 import requests as requests
 
 REST_PROXY_URL = "http://localhost:8082/v3"
+SCHEMA_REGISTRY_URL = "http://localhost:8081"
+
 HEADERS = {
     "Content-Type": "application/json",
     "Accept": "application/json",
 }
-
 
 def get_result(topic_resp):
     if topic_resp.status_code == 201 or topic_resp.status_code == 200:
@@ -35,8 +37,22 @@ def create_topic(topic):
         ]
     })
 
-    schema_resp = requests.post
+    create_key_schema(topic)
     print(f'Creating topic: {topic} -> {get_result(topic_resp)}')
+
+
+def create_key_schema(topic):
+    resp = requests.post(url=f'http://localhost:8081/subjects/{topic}-key/versions', headers=HEADERS, json={
+        "schema": json.dumps({"type": "string"})
+    })
+    return resp
+
+
+def create_value_schema(topic):
+    resp = requests.post(url=f'http://localhost:8081/subjects/{topic}-value/versions', headers=HEADERS, json={
+        "schema": json.dumps({"type": "string"})
+    })
+    return resp
 
 
 if __name__ == '__main__':
