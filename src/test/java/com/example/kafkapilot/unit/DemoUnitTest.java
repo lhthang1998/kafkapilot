@@ -1,13 +1,12 @@
-package com.example.kafkapilot.component;
-
+package com.example.kafkapilot.unit;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DemoComponentTest extends ComponentBase {
+public class DemoUnitTest {
     @Test
-    void testRedis() {
+    void testUnit() {
         var x = 1 + 2;
         assertEquals(x, 3);
     }

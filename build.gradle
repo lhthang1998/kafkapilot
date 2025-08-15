@@ -32,6 +32,8 @@ dependencies {
 			'org.springframework.cloud:spring-cloud-starter-bootstrap',
 			"org.springframework.boot:spring-boot-starter-actuator:3.5.3",
 
+			"org.springframework.boot:spring-boot-starter-webflux:3.5.4",
+
 			"org.projectlombok:lombok:1.18.24"
 	)
 
@@ -52,6 +54,7 @@ dependencyManagement {
 apply plugin: 'docker-compose'
 
 tasks.named('test') {
+	include "**/unit/**"
 	useJUnitPlatform()
 
 	testLogging {
@@ -72,6 +75,29 @@ tasks.register('componentTest', Test.class) {
 	description = "Run component test"
 	dependsOn tasks.startTestEnvironment
 	finalizedBy tasks.stopTestEnvironment
+	useJUnitPlatform()
+}
+
+
+tasks.register('startApp', DefaultTask.class) {
+	doFirst {
+		'./gradlew bootRun'.execute()
+	}
+}
+
+tasks.register('stopApp', DefaultTask.class) {
+	doFirst {
+		'./gradlew stop'.execute()
+	}
+}
+
+tasks.register('blackboxTest', Test.class) {
+	include "**/blackbox/**"
+	description = "Run blackbox test"
+	dependsOn tasks.startApp
+	mustRunAfter tasks.componentTest
+
+	finalizedBy tasks.stopApp
 	useJUnitPlatform()
 }
 
