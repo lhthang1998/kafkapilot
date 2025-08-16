@@ -1,0 +1,22 @@
+{
+  "name": "MyTask",
+  "namespace": "demo.avro",
+  "type": "record",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "time",
+      "type": "long"
+    }
+  ],
+}

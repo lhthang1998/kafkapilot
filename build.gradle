@@ -20,6 +20,7 @@ java {
 
 repositories {
 	mavenCentral()
+	gradlePluginPortal()
 }
 
 ext {
@@ -36,6 +37,8 @@ dependencies {
 			"pl.project13.maven:git-commit-id-plugin:4.9.10",
 
 			"org.springframework.boot:spring-boot-starter-webflux:3.5.4",
+
+			"org.apache.avro:avro:1.11.4",
 
 			"org.projectlombok:lombok:1.18.24"
 	)
