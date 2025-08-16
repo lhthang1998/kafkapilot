@@ -1,0 +1,30 @@
+topic:
+  name: "test.v1"
+  partitions: 3
+subjects:
+  test.v1-key:
+    schema: >
+      {
+          "type": "string"
+      }
+  test.v1-value:
+    schema: >
+      {
+          "type": "record",
+          "name": "MyTask",
+          "namespace": "demo.avro",
+          "fields": [
+            {
+              "type": "string",
+              "name": "name"
+            },
+            {
+              "type": ["null", "string"],
+              "name": "description"
+            },
+            {
+              "type": "long",
+              "name": "time"
+            }
+          ]
+      }
