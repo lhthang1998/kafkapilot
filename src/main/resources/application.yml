@@ -1,6 +1,20 @@
 spring:
   application:
     name: kafkapilot
+  kafka:
+    security:
+      protocol: SSL
+    ssl:
+      key-store-location:
+      key-store-password:
+      key-store-key: jks
+    properties:
+      schema.registry.ssl.keystore.location: ${infrastructure.services.ssl.keyStorePath}
+      schema.registry.ssl.keystore.password: ${infrastructure.services.ssl.keyStorePassword}
+      schema.registry.ssl.key.password: ${infrastructure.services.ssl.keyStorePassword}
+      max.poll.records: 500
+      fetch.max.wait.ms: 500
+
 
 management:
   endpoints:
@@ -10,3 +24,22 @@ management:
   info:
     git:
       mode: full
+
+
+app:
+  applicationId: 1
+  kafkapilot:
+    application-id: stream.app.${spring.app.name}
+    acks: all
+    num-stream-threads: 8
+  kafka:
+    topics:
+      myTask: test-v1
+
+
+infrastructure:
+  services:
+    ssl:
+      keyStorePath:
+      keyStorePassword:
+      keyPassword:
