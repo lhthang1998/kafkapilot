@@ -48,6 +48,7 @@ dependencies {
 
 			"org.apache.avro:avro:1.12.0",
 			"io.confluent:kafka-avro-serializer:${confluentVersion}",
+			"io.confluent:kafka-streams-avro-serde:${confluentVersion}",
 
 			//kafka
 			'org.springframework.kafka:spring-kafka:3.3.8',

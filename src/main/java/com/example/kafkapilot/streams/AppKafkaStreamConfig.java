@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AppKafkaStreamConfig {
     private final KafkaProperties kafkaProperties;
-    private final KafkaTopics kafkaTopics;
 
     @Bean
     public KafkaTemplate<String, MyTask> kafkaTemplate() {
