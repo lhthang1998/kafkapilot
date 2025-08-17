@@ -1,6 +1,6 @@
 {
   "name": "MyTask",
-  "namespace": "com.example.kafkapilot.avro",
+  "namespace": "demo.avro",
   "type": "record",
   "fields": [
     {

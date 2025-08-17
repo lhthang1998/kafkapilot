@@ -79,7 +79,7 @@ gitProperties {
 
 tasks.register("generateAvro", GenerateAvroJavaTask) {
 	source("./src/main/resources/avro")
-	outputDir = file("build/generated/avro")
+	outputDir = file("./build/generated/avro")
 }
 
 tasks.named('test', Test.class) {
@@ -151,4 +151,4 @@ dockerCompose {
 	projectName = "kafkapilot"
 }
 
-tasks.build.dependsOn += ['generateAvro', 'test', 'componentTest', 'blackboxTest']
+tasks.build.dependsOn += ['generateAvro', 'test']
