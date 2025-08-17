@@ -21,8 +21,9 @@ public class TopicController {
 
     @PostMapping("/send")
     public ResponseEntity<String> sendMessage() {
-        var myTask = MyTask.newBuilder().setName("a").setDescription("").setTime(System.currentTimeMillis()).build();
-        kafkaTemplate.send(kafkaTopics.getMyTask(), UUID.randomUUID().toString(), myTask);
+        var key = UUID.randomUUID().toString();
+        var myTask = MyTask.newBuilder().setName("Task-" + key).setDescription("Description here").setTime(System.currentTimeMillis()).build();
+        kafkaTemplate.send(kafkaTopics.getMyTask(), key, myTask);
         return ResponseEntity.ok(null);
     }
 

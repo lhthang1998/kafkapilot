@@ -1,4 +1,4 @@
-package com.example.kafkapilot.topology;
+package com.example.kafkapilot.streams.topology;
 
 import demo.avro.MyTask;
 import lombok.RequiredArgsConstructor;

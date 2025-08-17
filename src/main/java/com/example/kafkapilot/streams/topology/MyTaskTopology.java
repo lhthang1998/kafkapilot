@@ -1,4 +1,4 @@
-package com.example.kafkapilot.topology;
+package com.example.kafkapilot.streams.topology;
 
 import com.example.kafkapilot.streams.AppSerdes;
 import com.example.kafkapilot.streams.KafkaTopics;
@@ -21,7 +21,7 @@ public class MyTaskTopology {
     public KStream<String, MyTask> stream(StreamsBuilder builder) {
         return builder.stream(kafkaTopics.getMyTask(), Consumed.with(Serdes.String(), serdes.myTaskSerde())).peek(
                 (k, v) -> {
-                    log.info("Started processing key={}", k);
+                    log.info("Hello from key={}", k);
                 }
         );
     }

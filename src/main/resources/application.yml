@@ -36,7 +36,7 @@ app:
   kafkapilot:
     application-id: stream.app.${spring.app.name}
     acks: all
-    num-stream-threads: 8
+    num-stream-threads: 3
   kafka:
     topics:
       myTask: test.v1
