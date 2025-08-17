@@ -77,6 +77,11 @@ gitProperties {
 	keys = ['git.branch','git.commit.id','git.commit.time']
 }
 
+def avroCodeGenerationDir = "./build/generated/avro"
+
+// Add the generated Avro Java code to the Gradle source files.
+sourceSets.main.java.srcDirs += [avroCodeGenerationDir]
+
 tasks.register("generateAvro", GenerateAvroJavaTask) {
 	source("./src/main/resources/avro")
 	outputDir = file("build/generated/avro")
@@ -151,4 +156,9 @@ dockerCompose {
 	projectName = "kafkapilot"
 }
 
-tasks.build.dependsOn += ['generateAvro', 'test', 'componentTest', 'blackboxTest']
+tasks.withType(JavaCompile).configureEach {
+	// Make Java compilation tasks depend on the Avro code generation task.
+	dependsOn += ['generateAvro']
+}
+
+tasks.build.dependsOn += ['test']
