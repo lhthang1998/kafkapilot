@@ -78,9 +78,7 @@ gitProperties {
 	keys = ['git.branch','git.commit.id','git.commit.time']
 }
 
-
-def avroSchemasDir = "src/main/resources/avro"
-def avroCodeGenerationDir = "build/generated/avro"
+def avroCodeGenerationDir = "./build/generated/avro"
 
 // Add the generated Avro Java code to the Gradle source files.
 sourceSets.main.java.srcDirs += [avroCodeGenerationDir]
