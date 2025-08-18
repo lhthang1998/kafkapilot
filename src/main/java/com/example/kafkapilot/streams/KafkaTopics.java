@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("app.kafka.topics")
 public class KafkaTopics {
     private String myTask;
+    private String taskStatus;
 }

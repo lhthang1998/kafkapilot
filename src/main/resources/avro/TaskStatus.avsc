@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "name": "TaskStatus",
+  "namespace": "demo.avro",
+  "fields": [
+    {
+      "type": "string",
+      "name": "name"
+    },
+    {
+      "type": ["null", "string"],
+      "name": "status",
+      "default": null
+    },
+    {
+      "type": "long",
+      "name": "time"
+    }
+  ]
+}

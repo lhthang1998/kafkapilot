@@ -37,7 +37,7 @@ public class StreamInterceptors implements ProducerInterceptor<byte[], byte[]>, 
     public ProducerRecord<byte[], byte[]> onSend(ProducerRecord<byte[], byte[]> producerRecord) {
         var key = stringDeserializer.deserialize(producerRecord.topic(), producerRecord.key());
         log.info("Published message to topic={} with key={}", producerRecord.topic(), key);
-        return null;
+        return producerRecord;
     }
 
     @Override

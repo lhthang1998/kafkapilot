@@ -1,0 +1,31 @@
+topic:
+  name: "output.v1"
+  partitions: 3
+subjects:
+  output.v1-key:
+    schema: >
+      {
+          "type": "string"
+      }
+  output.v1-value:
+    schema: >
+      {
+          "type": "record",
+          "name": "TaskStatus",
+          "namespace": "demo.avro",
+          "fields": [
+            {
+              "type": "string",
+              "name": "name"
+            },
+            {
+              "type": ["null", "string"],
+              "name": "status",
+              "default": null
+            },
+            {
+              "type": "long",
+              "name": "time"
+            }
+          ]
+      }

@@ -39,7 +39,8 @@ app:
     num-stream-threads: 3
   kafka:
     topics:
-      myTask: test.v1
+      task-status: output.v1
+      my-task: test.v1
 
 
 infrastructure:

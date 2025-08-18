@@ -2,6 +2,7 @@ package com.example.kafkapilot.streams;
 
 
 import demo.avro.MyTask;
+import demo.avro.TaskStatus;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serde;
@@ -18,6 +19,12 @@ public class AppSerdes {
 
     public Serde<MyTask> myTaskSerde() {
         SpecificAvroSerde<MyTask> serde = new SpecificAvroSerde<>();
+        serde.configure(getAvroSerdeConfig(), false);
+        return serde;
+    }
+
+    public Serde<TaskStatus> taskStatusSerde() {
+        SpecificAvroSerde<TaskStatus> serde = new SpecificAvroSerde<>();
         serde.configure(getAvroSerdeConfig(), false);
         return serde;
     }
