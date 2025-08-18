@@ -1,16 +1,26 @@
 package com.example.performance;
 
-import com.example.performance.config.EnviromentConfigLoader;
+import com.example.performance.config.EnvironmentConfigLoader;
+import com.example.performance.integrations.BaseReceiver;
+import com.example.performance.integrations.BaseSender;
 import io.gatling.core.scenario.Simulation;
+import lombok.Getter;
 
+import java.util.List;
+
+@Getter
 public abstract class BaseSimulation extends Simulation {
-    protected final EnviromentConfigLoader config;
+    protected final EnvironmentConfigLoader config;
 
-    protected BaseSimulation(EnviromentConfigLoader config) {
+    public BaseSimulation() {
+        this(new EnvironmentConfigLoader("application.conf"));
+    }
+    public BaseSimulation(EnvironmentConfigLoader config) {
         this.config = config;
     }
 
-    public EnviromentConfigLoader getConfig() {
-        return config;
-    }
+    protected List<BaseReceiver> getReceivers() { return List.of(); };
+
+
+    protected List<BaseSender> getSenders() { return List.of(); };
 }

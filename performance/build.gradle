@@ -1,7 +1,6 @@
 plugins {
 	id 'java'
 	id 'war'
-	id 'org.springframework.boot' version '3.5.4'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'io.gatling.gradle' version '3.14.3.5'
 }
@@ -32,31 +31,40 @@ ext {
 
 dependencies {
 	implementation (
-			'org.springframework.boot:spring-boot-starter-web',
 
 			//lib-gatling
+
 			"io.gatling:gatling-core:${gatlingVersion}",
 			"io.gatling:gatling-http:${gatlingVersion}",
 			"io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
 	)
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
 
-sourceSets {
-	gatling {
-		java.srcDir 'src/main/java'
-		resources.srcDir 'src/main/resources' // For configuration files, data, etc.
-	}
-}
+apply plugin: 'io.gatling.gradle'
+
+
+def reportDesscription = "CI Performance Testing"
+def simulation = "com.example.performance.AppSimulation"
 
 tasks.register("runLoadTest", JavaExec.class) {
+	environment(Map.of("GATLING_HOME", workingDir))
 	description 'PERFORMANCE TESTING'
+
+	getMainClass().set("io.gatling.app.Gatling")
+
+	classpath = sourceSets.test.runtimeClasspath
+	systemProperties = System.getProperties() as Map<String, ?>;
+	jvmArgs List.of('--add-opens', 'java.base/java.lang=ALL-UNNAMED')
+
+	// Specify the simulation class to run
+	args = ['-s', "${simulation}",
+			'-rd', "${reportDesscription}",
+			'-rf', "${workingDir}/build/reports/gatling"
+	]
 }

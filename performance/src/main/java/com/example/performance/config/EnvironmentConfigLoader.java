@@ -8,24 +8,22 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 import java.util.Optional;
 
+@Getter
 @Slf4j
-public class EnviromentConfigLoader {
-    @Getter
+public class EnvironmentConfigLoader {
     private final Config environmentConfig;
 
-    @Getter
     private final Config globalConfig;
 
-    @Getter
     private final String environmentName;
 
-    public EnviromentConfigLoader(String configFile) {
+    public EnvironmentConfigLoader(String configFile) {
         environmentName = getEnv();
         globalConfig = ConfigFactory.load(configFile).getConfig("gatling");
         environmentConfig = globalConfig.getConfig("environments." + environmentName);
     }
 
-    public static final String getEnv() {
+    public static String getEnv() {
         return System.getenv().getOrDefault("ENVIRONMENT", "local");
     }
 
