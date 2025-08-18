@@ -1,19 +1,55 @@
 plugins {
-    id 'java'
+	id 'java'
+	id 'war'
+	id 'org.springframework.boot' version '3.5.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'io.gatling.gradle' version '3.14.3.5'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
+description = 'performance'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 
 repositories {
-    mavenCentral()
+	mavenCentral()
+}
+
+ext {
+	set('gatlingVersion', "3.14.3")
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+	implementation (
+			'org.springframework.boot:spring-boot-starter-web',
+
+			//lib-gatling
+			"io.gatling:gatling-core:${gatlingVersion}",
+			"io.gatling:gatling-http:${gatlingVersion}",
+			"io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
+	)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-test {
-    useJUnitPlatform()
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.register("runLoadTest", JavaExec.class) {
+	description 'PERFORMANCE TESTING'
 }

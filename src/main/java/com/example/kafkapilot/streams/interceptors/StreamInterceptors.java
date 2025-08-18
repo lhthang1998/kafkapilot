@@ -1,6 +1,5 @@
 package com.example.kafkapilot.streams.interceptors;
 
-import lombok.NoArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
