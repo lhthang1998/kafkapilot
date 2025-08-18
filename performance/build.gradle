@@ -50,6 +50,13 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+sourceSets {
+	gatling {
+		java.srcDir 'src/main/java'
+		resources.srcDir 'src/main/resources' // For configuration files, data, etc.
+	}
+}
+
 tasks.register("runLoadTest", JavaExec.class) {
 	description 'PERFORMANCE TESTING'
 }
