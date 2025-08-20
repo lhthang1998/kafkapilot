@@ -19,7 +19,7 @@ public class AppSimulation extends Simulation {
     // Define the scenario
     ScenarioBuilder scn = scenario("MyScenario")
             .exec(http("Get Request")
-                    .get("/api/endpoint") // Change to your target endpoint
+                    .get("") // Change to your target endpoint
                     .check(status().is(200)));
 
     // Set up the simulation
