@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@RequiredArgsConstructor
 public abstract class BaseSender<K, V> {
     protected Cache<K, V> inputCache;
     protected Cache<K, V> rawKeyMap;

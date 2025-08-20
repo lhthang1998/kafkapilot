@@ -6,10 +6,10 @@ import com.example.performance.integrations.BaseReceiver;
 import com.example.performance.integrations.BaseSender;
 import com.example.performance.model.TestPlanLoader;
 import com.example.performance.simulation.ResultController;
-import io.gatling.core.scenario.Simulation;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.core.OpenInjectionStep;
 import io.gatling.javaapi.core.PopulationBuilder;
-import io.gatling.javaapi.core.internal.OpenInjectionSteps;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import scala.Function0;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static io.gatling.javaapi.core.CoreDsl.atOnceUsers;
 import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
 
 @Slf4j
@@ -33,7 +34,9 @@ public abstract class BaseSimulation extends Simulation {
     }
     public BaseSimulation(EnvironmentConfigLoader config) {
         this.config = config;
+
     }
+
 
     protected List<BaseReceiver> getReceivers() { return List.of(); };
 
@@ -44,13 +47,11 @@ public abstract class BaseSimulation extends Simulation {
         return Map.of();
     }
 
-    @Override
-    public void before(Function0<BoxedUnit> step) {
+    public void before() {
         this.start();
     }
 
-    @Override
-    public void after(Function0<BoxedUnit> step) {
+    public void after() {
         try {
             getResultController().reconcile();
         } catch (Exception e) {
@@ -86,17 +87,18 @@ public abstract class BaseSimulation extends Simulation {
         var scenarioMap = getScenarioMap();
         var totalTps = config.getTotalTps();
         var duration = config.getDuration();
+
         return getTestPlanLoader().getTestPlan().getPlans()
                 .stream()
                 .flatMap(plan -> plan.getScenarios()
                         .stream().filter(s -> scenarioMap.containsKey(s.getName()))
-                        .map(scenario -> scenarioMap.get(scenario).getScenario().injectOpen(
+                        .map(scenario -> scenarioMap.get(scenario.getName()).getScenario().injectOpen(
                                 generateInjection(scenario.getTps(), plan.getTotalReferenceTps(), totalTps, duration)
                         )))
                 .collect(Collectors.toList());
     }
 
-    private List<OpenInjectionStep> generateInjection(Double scenarioTps, Double totalReferenceTps, Double totalTps, Duration duration) {
+    protected List<OpenInjectionStep> generateInjection(Double scenarioTps, Double totalReferenceTps, Double totalTps, Duration duration) {
         var injectionSteps = new ArrayList<OpenInjectionStep>();
         injectionSteps.add(constantUsersPerSec((scenarioTps / totalReferenceTps) * totalTps).during(duration));
         return injectionSteps;

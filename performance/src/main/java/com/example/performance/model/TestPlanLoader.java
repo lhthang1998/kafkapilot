@@ -35,7 +35,7 @@ public class TestPlanLoader<T extends ExecutionConfiguration> {
 
     private void getOrDefaultTestPlan(Yaml parser) throws FileNotFoundException {
         InputStream inputStream = null;
-        if ("lower".equalsIgnoreCase(System.getenv().getOrDefault("ENVIRONMENT", "local"))) {
+        if ("local".equalsIgnoreCase(System.getenv().getOrDefault("ENVIRONMENT", "local"))) {
             inputStream = this.getClass().getClassLoader().getResourceAsStream(DEFAULT_TEST_PLAN);
             this.testPlan = parser.loadAs(inputStream, this.testPlanType);
         } else {
