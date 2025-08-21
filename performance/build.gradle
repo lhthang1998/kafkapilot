@@ -27,14 +27,19 @@ repositories {
 
 ext {
 	set('gatlingVersion', "3.14.3")
+	set("kafkaVersion", "3.9.1")
 }
 
 dependencies {
 	implementation (
 			"org.yaml:snakeyaml:2.4",
 
-			//lib-gatling
+			//kafka
+			'org.springframework.kafka:spring-kafka:3.3.8',
+			"org.apache.kafka:kafka-clients:${kafkaVersion}",
+			"org.apache.kafka:kafka-streams:${kafkaVersion}",
 
+			//lib-gatling
 			"io.gatling:gatling-core:${gatlingVersion}",
 			"io.gatling:gatling-http:${gatlingVersion}",
 			"io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
