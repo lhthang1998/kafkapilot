@@ -1,8 +1,11 @@
+import com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask
+
 plugins {
 	id 'java'
 	id 'war'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'io.gatling.gradle' version '3.14.3.5'
+	id "com.github.davidmc24.gradle.plugin.avro" version '1.9.1'
 }
 
 group = 'com.example'
@@ -28,6 +31,7 @@ repositories {
 ext {
 	set('gatlingVersion', "3.14.3")
 	set("kafkaVersion", "3.9.1")
+	set("confluentVersion", "7.9.2")
 }
 
 dependencies {
@@ -66,6 +70,10 @@ def avroCodeGenerationDir = "./build/generated/avro"
 // Add the generated Avro Java code to the Gradle source files.
 sourceSets.main.java.srcDirs += [avroCodeGenerationDir]
 
+tasks.register("generateAvro", GenerateAvroJavaTask) {
+	source("./../src/main/resources/avro")
+	outputDir = file("./build/generated/avro")
+}
 
 def reportDesscription = "CI Performance Testing"
 def simulation = "com.example.performance.AppSimulation"

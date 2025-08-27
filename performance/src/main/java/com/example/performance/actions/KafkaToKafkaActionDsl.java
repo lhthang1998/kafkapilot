@@ -3,7 +3,6 @@ package com.example.performance.actions;
 import com.example.performance.details.KafkaMessageDetails;
 import com.example.performance.kafka.ConcreteKafkaConsumer;
 import com.example.performance.kafka.ConcreteKafkaProducer;
-import com.typesafe.scalalogging.Logger;
 import io.gatling.core.action.Action;
 import io.gatling.core.session.Session;
 import io.gatling.core.stats.StatsEngine;
@@ -17,7 +16,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
