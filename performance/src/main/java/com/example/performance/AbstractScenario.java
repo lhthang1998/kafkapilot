@@ -5,6 +5,9 @@ import io.gatling.javaapi.core.ScenarioBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 @Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractScenario {
@@ -12,4 +15,8 @@ public abstract class AbstractScenario {
     protected final EnvironmentConfigLoader config;
 
     public abstract ScenarioBuilder getScenario();
+
+    public Executor getExecutor() {
+        return Executors.newFixedThreadPool(3);
+    }
 }

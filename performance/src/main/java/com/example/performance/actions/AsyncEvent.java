@@ -1,7 +1,9 @@
 package com.example.performance.actions;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class AsyncEvent<V> {
     private Long timestamp;

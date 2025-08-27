@@ -1,12 +1,16 @@
 package com.example.performance.kafka;
 
+import com.example.performance.actions.AsyncEvent;
+import com.example.performance.details.KafkaMessageDetails;
 import com.example.performance.integrations.BaseReceiver;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import scala.Option;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -56,4 +60,6 @@ public abstract class BaseConreteKafkaConsumer<K, V, S extends Representable, RV
 
     public void start() { startListener(); };
     public void stop() { stopListener(); }
+
+    public abstract Optional<AsyncEvent<S>> findAsyncEventForKey(K key);
 }

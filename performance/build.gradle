@@ -33,16 +33,23 @@ ext {
 dependencies {
 	implementation (
 			"org.yaml:snakeyaml:2.4",
+			"io.vavr:vavr:0.10.7",
 
 			//kafka
 			'org.springframework.kafka:spring-kafka:3.3.8',
 			"org.apache.kafka:kafka-clients:${kafkaVersion}",
 			"org.apache.kafka:kafka-streams:${kafkaVersion}",
 
+			//avro
+			"org.apache.avro:avro:1.12.0",
+			"io.confluent:kafka-avro-serializer:${confluentVersion}",
+			"io.confluent:kafka-streams-avro-serde:${confluentVersion}",
+
 			//lib-gatling
 			"io.gatling:gatling-core:${gatlingVersion}",
 			"io.gatling:gatling-http:${gatlingVersion}",
-			"io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
+			"io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}",
+
 	)
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
@@ -53,6 +60,11 @@ tasks.named('test') {
 }
 
 apply plugin: 'io.gatling.gradle'
+
+def avroCodeGenerationDir = "./build/generated/avro"
+
+// Add the generated Avro Java code to the Gradle source files.
+sourceSets.main.java.srcDirs += [avroCodeGenerationDir]
 
 
 def reportDesscription = "CI Performance Testing"

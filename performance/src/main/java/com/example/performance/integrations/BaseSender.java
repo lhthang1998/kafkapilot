@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class BaseSender<K, V> {
     protected Cache<K, V> inputCache;
-    protected Cache<K, V> rawKeyMap;
+    protected Cache<K, K> rawKeyMap;
 
     protected Cache<K, String> scenarioMap;
 
