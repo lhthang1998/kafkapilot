@@ -7,6 +7,7 @@ import io.gatling.core.action.Action;
 import io.gatling.core.session.Session;
 import io.gatling.core.stats.StatsEngine;
 import io.gatling.core.structure.ScenarioContext;
+import lombok.Builder;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecord;
@@ -34,12 +35,14 @@ public class KafkaToKafkaActionDsl<IK, IV> extends IntegrationActionDsl {
 
     protected final Supplier<IK> keySupplier;
     protected final Function<IK, IV> valueSupplier;
+
+    @Builder.Default
     protected Long maxTimeoutMs = Long.valueOf(System.getenv().getOrDefault("MAX_TIMEOUT_MS", "30000"));
 
     @Override
     public Action build(ScenarioContext ctx, Action action) {
         var inputCache = Objects.nonNull(consumer)? consumer.getInputCache() : null;
-        if (!kafkaConsumers.isEmpty() && Objects.nonNull(inputCache)) {
+        if (Objects.nonNull(kafkaConsumers) && !kafkaConsumers.isEmpty() && Objects.nonNull(inputCache)) {
             producer.setRawKeyMap(kafkaConsumers.get(0).getRawKeyMap());
         }
         producer.setInputCache(inputCache);
@@ -56,10 +59,9 @@ public class KafkaToKafkaActionDsl<IK, IV> extends IntegrationActionDsl {
             super(KafkaToKafkaActionDsl.this.name, statsEngine, action, executor);
         }
 
-
         @Override
         protected void trackOkRecord(KafkaMessageDetails<IK> details, String timeframe) {
-            if (!kafkaConsumers.isEmpty()) {
+            if (Objects.nonNull(kafkaConsumers) && !kafkaConsumers.isEmpty()) {
                 kafkaConsumers.get(0).trackOkRecord(details.getKey(), timeframe);
             } else {
                 consumer.trackOkRecord(details.getKey(), timeframe);
@@ -68,7 +70,7 @@ public class KafkaToKafkaActionDsl<IK, IV> extends IntegrationActionDsl {
 
         @Override
         protected void trackKoRecord(KafkaMessageDetails<IK> details, String timeframe) {
-            if (!kafkaConsumers.isEmpty()) {
+            if (Objects.nonNull(kafkaConsumers) && !kafkaConsumers.isEmpty()) {
                 kafkaConsumers.get(0).trackKoRecord(details.getKey(), timeframe);
             } else {
                 consumer.trackKoRecord(details.getKey(), timeframe);
@@ -81,7 +83,7 @@ public class KafkaToKafkaActionDsl<IK, IV> extends IntegrationActionDsl {
             var key = keySupplier.get();
             var inputCache = Objects.nonNull(consumer)? consumer.getInputCache() : null;
             var scenarioCache = Objects.nonNull(consumer)? consumer.getScenarioMap() : null;
-            if (!CollectionUtils.isEmpty(kafkaConsumers) && Objects.nonNull(inputCache)) {
+            if (Objects.nonNull(kafkaConsumers) && !CollectionUtils.isEmpty(kafkaConsumers) && Objects.nonNull(inputCache)) {
                 inputCache = kafkaConsumers.get(0).getInputCache();
                 scenarioCache = kafkaConsumers.get(0).getScenarioMap();
             }

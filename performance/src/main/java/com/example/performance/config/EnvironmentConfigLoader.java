@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.util.Optional;
+import java.util.Properties;
 
 @Getter
 @Slf4j
@@ -38,5 +39,43 @@ public class EnvironmentConfigLoader {
     public double getTotalTps() {
         return Double.parseDouble(Optional.ofNullable(System.getenv("TOTAL_TPS"))
                 .map((item) -> item.isBlank() ? null : item).orElseGet(() -> environmentConfig.getString("totalTps")));
+    }
+
+    public String getKafkaTopic(String topic) {
+        return environmentConfig.getConfig("kafka.topics").getString(topic);
+    }
+
+    public Properties getKafkaProducerProperties(String producerName) {
+        var kafkaConfig = getKafkaProperties();
+        environmentConfig.getConfig("kafka.properties.producers").getConfig(producerName)
+                .entrySet()
+                .forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue().unwrapped()));
+        return kafkaConfig;
+    }
+
+    public Properties getKafkaProducerProperties() {
+        return getKafkaProducerProperties("default");
+    }
+
+    public Properties getKafkaConsumerProperties(String consumerName) {
+        var kafkaConfig = getKafkaProperties();
+        environmentConfig.getConfig("kafka.properties.producers").getConfig(consumerName)
+                .entrySet()
+                .forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue()));
+        return kafkaConfig;
+    }
+
+    public Properties getKafkaConsumerProperties() {
+        return getKafkaConsumerProperties("default");
+    }
+
+    private Properties getKafkaProperties() {
+        var props = new Properties();
+        environmentConfig.getConfig("kafka.properties")
+                .withoutPath("producers")
+                .withoutPath("consumers")
+                .entrySet()
+                .forEach(entry -> props.put(entry.getKey(), entry.getValue().unwrapped()));
+        return props;
     }
 }

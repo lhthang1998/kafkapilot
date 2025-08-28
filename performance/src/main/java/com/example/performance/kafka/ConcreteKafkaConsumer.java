@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Slf4j
-public abstract class ConcreteKafkaConsumer<K,V> extends BaseConreteKafkaConsumer<K, V, KafkaMessageDetails<K>, Long> {
+public abstract class ConcreteKafkaConsumer<K,V> extends BaseConcreteKafkaConsumer<K, V, KafkaMessageDetails<K>, Long> {
     public ConcreteKafkaConsumer(Properties kafkaProperties, List<String> topics) {
         super(kafkaProperties, topics, true);
     }

@@ -18,12 +18,10 @@ import static io.gatling.javaapi.core.CoreDsl.scenario;
 public class TaskScenario extends AbstractScenario {
     private final ConcreteKafkaConsumer<String, SpecificRecord> consumer;
     private final ConcreteKafkaProducer<String, MyTask> producer;
-    private final String topic;
-    public TaskScenario(String scenarioName, EnvironmentConfigLoader config, ConcreteKafkaConsumer<String, SpecificRecord> consumer, ConcreteKafkaProducer<String, MyTask> producer, String topic) {
+    public TaskScenario(String scenarioName, EnvironmentConfigLoader config, ConcreteKafkaConsumer<String, SpecificRecord> consumer, ConcreteKafkaProducer<String, MyTask> producer) {
         super(scenarioName, config);
         this.consumer = consumer;
         this.producer = producer;
-        this.topic = topic;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class TaskScenario extends AbstractScenario {
                         .name(scenarioName)
                         .consumer(consumer)
                         .producer(producer)
-                        .topic(topic)
+                        .topic(config.getKafkaTopic("myTaskTopic"))
                         .keySupplier(() -> UUID.randomUUID().toString())
                         .valueSupplier(getValue())
                         .build());

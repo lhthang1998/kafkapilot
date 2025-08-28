@@ -34,12 +34,9 @@ public abstract class BaseSimulation extends Simulation {
     }
     public BaseSimulation(EnvironmentConfigLoader config) {
         this.config = config;
-
     }
 
-
     protected List<BaseReceiver> getReceivers() { return List.of(); };
-
 
     protected List<BaseSender> getSenders() { return List.of(); };
 

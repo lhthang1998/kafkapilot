@@ -3,10 +3,8 @@
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{15} - %msg%n%rEx</pattern>
         </encoder>
-        <immediateFlush>false</immediateFlush>
+        <immediateFlush>true</immediateFlush>
     </appender>
-
-    <logger name="io.gatling.http.engine.response"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

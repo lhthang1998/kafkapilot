@@ -166,4 +166,9 @@ public abstract class AbstractAction<S extends Representable, T> implements Chai
     public StatsEngine statsEngine() {
         return statsEngine;
     }
+
+    @Override
+    public void $bang(Session session) {
+        execute(session);
+    }
 }

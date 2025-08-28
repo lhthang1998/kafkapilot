@@ -1,12 +1,10 @@
 package com.example.performance.kafka;
 
 import com.example.performance.actions.AsyncEvent;
-import com.example.performance.details.KafkaMessageDetails;
 import com.example.performance.integrations.BaseReceiver;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import scala.Option;
 
 import java.time.Duration;
 import java.util.List;
@@ -16,18 +14,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 @Slf4j
-public abstract class BaseConreteKafkaConsumer<K, V, S extends Representable, RV> extends BaseReceiver<K, Long, RV> {
+public abstract class BaseConcreteKafkaConsumer<K, V, S extends Representable, RV> extends BaseReceiver<K, Long, RV> {
     protected final Properties kafkaProperties;
     protected final boolean useRecordCreationTimestamp;
     private final List<String> topics;
-    private final Consumer<ConsumerRecord<K, V>> retainRecordConsumer = record -> retainRecord(record);
+    private final Consumer<ConsumerRecord<K, V>> retainRecordConsumer = this::retainRecord;
     private ConcurrentConsumer concurrentConsumer;
 
-    public BaseConreteKafkaConsumer(Properties kafkaProperties, List<String> topics) {
+    public BaseConcreteKafkaConsumer(Properties kafkaProperties, List<String> topics) {
         this(kafkaProperties, topics, false);
     }
 
-    public BaseConreteKafkaConsumer(Properties kafkaProperties, List<String> topics, boolean useRecordCreationTimestamp) {
+    public BaseConcreteKafkaConsumer(Properties kafkaProperties, List<String> topics, boolean useRecordCreationTimestamp) {
         this.topics = topics;
         this.kafkaProperties = kafkaProperties;
         this.useRecordCreationTimestamp = useRecordCreationTimestamp;
