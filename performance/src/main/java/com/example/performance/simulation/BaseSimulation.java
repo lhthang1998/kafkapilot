@@ -1,27 +1,27 @@
-package com.example.performance;
+package com.example.performance.simulation;
 
+import com.example.performance.AbstractScenario;
 import com.example.performance.config.EnvironmentConfigLoader;
 import com.example.performance.config.ExecutionConfiguration;
+import com.example.performance.executors.GlobalExecutorFactory;
 import com.example.performance.integrations.BaseReceiver;
 import com.example.performance.integrations.BaseSender;
+import com.example.performance.model.SlaConfiguration;
 import com.example.performance.model.TestPlanLoader;
-import com.example.performance.simulation.ResultController;
-import edu.umd.cs.findbugs.annotations.NonNull;
+import com.example.performance.simulation.controllers.ResultController;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.core.OpenInjectionStep;
 import io.gatling.javaapi.core.PopulationBuilder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import scala.Function0;
-import scala.runtime.BoxedUnit;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.gatling.javaapi.core.CoreDsl.atOnceUsers;
 import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
 
 @Slf4j
@@ -34,6 +34,7 @@ public abstract class BaseSimulation extends Simulation {
     }
     public BaseSimulation(EnvironmentConfigLoader config) {
         this.config = config;
+        GlobalExecutorFactory.init(config);
     }
 
     protected List<BaseReceiver> getReceivers() { return List.of(); };
@@ -42,6 +43,10 @@ public abstract class BaseSimulation extends Simulation {
 
     protected Map<String, AbstractScenario> getScenarioMap() {
         return Map.of();
+    }
+
+    protected ResultController getResultController() {
+        return new ResultController(getReceivers().stream().distinct().toList(), config, getTestPlanLoader(), getSlaConfigurationMap());
     }
 
     public void before() {
@@ -65,10 +70,12 @@ public abstract class BaseSimulation extends Simulation {
     protected void stop() {
         getReceivers().forEach(BaseReceiver::stop);
         getSenders().forEach(BaseSender::stop);
+        GlobalExecutorFactory.shutdownAll();
     }
 
-    protected ResultController getResultController() {
-        return new ResultController();
+
+    protected Map<String, SlaConfiguration> getSlaConfigurationMap() {
+        return new HashMap<>();
     }
 
     protected TestPlanLoader getTestPlanLoader() {

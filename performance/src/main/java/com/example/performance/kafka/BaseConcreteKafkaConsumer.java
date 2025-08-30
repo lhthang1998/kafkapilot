@@ -22,7 +22,7 @@ public abstract class BaseConcreteKafkaConsumer<K, V, S extends Representable, R
     private ConcurrentConsumer concurrentConsumer;
 
     public BaseConcreteKafkaConsumer(Properties kafkaProperties, List<String> topics) {
-        this(kafkaProperties, topics, false);
+        this(kafkaProperties, topics, true);
     }
 
     public BaseConcreteKafkaConsumer(Properties kafkaProperties, List<String> topics, boolean useRecordCreationTimestamp) {
@@ -33,17 +33,22 @@ public abstract class BaseConcreteKafkaConsumer<K, V, S extends Representable, R
 
     protected abstract void retainRecord(ConsumerRecord<K,V> record);
 
-    public CompletableFuture<Void> startListener() {
-        return CompletableFuture.runAsync(this::poll);
+    public void startListener() {
+        CompletableFuture.runAsync(this::poll);
     }
 
     private void poll() {
         log.info("Polling thread on topics {}", topics);
-        this.concurrentConsumer = new ConcurrentConsumer(
-                new KafkaConsumer<K,V>(kafkaProperties),
-                topics,
-                retainRecordConsumer,
-                getPollingDuration());
+        try {
+            this.concurrentConsumer = new ConcurrentConsumer(
+                    new KafkaConsumer<K,V>(kafkaProperties),
+                    topics,
+                    retainRecordConsumer,
+                    getPollingDuration());
+            return;
+        } catch (Exception e) {
+            log.error("Error when polling threads on topic {}", topics, e);
+        }
     }
 
     private Duration getPollingDuration() {

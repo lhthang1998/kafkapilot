@@ -1,5 +1,6 @@
 package com.example.performance.scenarios;
 
+import com.example.performance.AbstractAsyncScenario;
 import com.example.performance.AbstractScenario;
 import com.example.performance.config.EnvironmentConfigLoader;
 import com.example.performance.kafka.ConcreteKafkaConsumer;
@@ -15,7 +16,7 @@ import java.util.function.Function;
 import static com.example.performance.actions.KafkaToKafkaActionDsl.kafkaToKafka;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 
-public class TaskScenario extends AbstractScenario {
+public class TaskScenario extends AbstractAsyncScenario {
     private final ConcreteKafkaConsumer<String, SpecificRecord> consumer;
     private final ConcreteKafkaProducer<String, MyTask> producer;
     public TaskScenario(String scenarioName, EnvironmentConfigLoader config, ConcreteKafkaConsumer<String, SpecificRecord> consumer, ConcreteKafkaProducer<String, MyTask> producer) {

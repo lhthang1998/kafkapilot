@@ -70,6 +70,13 @@ public class GlobalExecutorFactory implements ExecutorFactory {
         return instance;
     }
 
+    public static void shutdownAll() {
+        if (instance != null) {
+            instance.allExecutors.forEach(ExecutorService::shutdown);
+            instance.preparedExecutors.forEach((s, exc) -> Try.run(exc::shutdown));
+        }
+    }
+
     @Override
     public ExecutorService getSingleThreadExecutor() {
         var singleThreadExecutor = Executors.newSingleThreadExecutor();

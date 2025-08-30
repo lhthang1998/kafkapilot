@@ -5,10 +5,9 @@ import com.example.performance.integrations.BaseReceiver;
 import com.example.performance.integrations.BaseSender;
 import com.example.performance.kafka.ConcreteKafkaProducer;
 import com.example.performance.kafka.KeyOnlyKafkaConsumer;
-import com.example.performance.scenarios.HttpBaseScenario;
 import com.example.performance.scenarios.TaskScenario;
+import com.example.performance.simulation.BaseSimulation;
 import demo.avro.MyTask;
-import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 import org.apache.avro.specific.SpecificRecord;
 

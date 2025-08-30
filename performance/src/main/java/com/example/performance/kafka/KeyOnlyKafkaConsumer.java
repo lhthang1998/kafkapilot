@@ -2,12 +2,14 @@ package com.example.performance.kafka;
 
 import com.example.performance.actions.AsyncEvent;
 import com.example.performance.details.KafkaMessageDetails;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+@Slf4j
 public class KeyOnlyKafkaConsumer<K,V> extends ConcreteKafkaConsumer<K, V>{
     public KeyOnlyKafkaConsumer(Properties kafkaProperties, List<String> topics) {
         super(kafkaProperties, topics);
@@ -20,6 +22,7 @@ public class KeyOnlyKafkaConsumer<K,V> extends ConcreteKafkaConsumer<K, V>{
     @Override
     protected void retainRecord(ConsumerRecord<K, V> record) {
         var key = record.key();
+        outputRecords.add(key);
         addResponseCache(key, record.timestamp());
     }
 

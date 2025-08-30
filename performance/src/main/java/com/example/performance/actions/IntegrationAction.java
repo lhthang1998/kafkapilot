@@ -1,5 +1,6 @@
 package com.example.performance.actions;
 
+import com.example.performance.executors.GlobalExecutorFactory;
 import com.example.performance.kafka.Representable;
 import io.gatling.core.action.Action;
 import io.gatling.core.session.Session;
@@ -31,7 +32,7 @@ public abstract class IntegrationAction<S extends Representable, T> extends Abst
     }
 
     protected void startPostEventsProcessor(ConcurrentLinkedQueue<Tuple3<AsyncEvent<S>, AsyncEvent<T>, Session>> postEventQueue, Executor postExecutionsExecutor) {
-        Executors.newSingleThreadExecutor().submit(() -> {
+        GlobalExecutorFactory.getInstance().getSingleThreadExecutor().submit(() -> {
             log.info("Starting the post event processor for {}", name);
             try {
                 while (true) {
@@ -47,7 +48,7 @@ public abstract class IntegrationAction<S extends Representable, T> extends Abst
     }
 
     protected void startEventsProcessor(ConcurrentLinkedQueue<Tuple2<AsyncEvent<S>, Session>> eventsQueue, Executor eventsExecutor) {
-        Executors.newSingleThreadExecutor().submit(() -> {
+        GlobalExecutorFactory.getInstance().getSingleThreadExecutor().submit(() -> {
            log.info("Starting the event processor for {}", name);
            try {
                while (true) {

@@ -58,6 +58,9 @@ dependencies {
 			"io.gatling:gatling-http:${gatlingVersion}",
 			"io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}",
 
+			//csv
+			"com.opencsv:opencsv:5.12.0"
+
 	)
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'

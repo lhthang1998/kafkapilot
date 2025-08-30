@@ -2,6 +2,7 @@ package com.example.performance.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import io.vavr.control.Try;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +37,12 @@ public class EnvironmentConfigLoader {
                 .orElseThrow();
     }
 
+    public Long getPostTestWaitTime() {
+        return Optional.ofNullable(System.getenv("POST_TEST_MS"))
+                .map(Long::parseLong)
+                .orElseGet(() -> Try.of(() -> environmentConfig.getLong("postTestMs")).getOrElse(0L));
+    }
+
     public double getTotalTps() {
         return Double.parseDouble(Optional.ofNullable(System.getenv("TOTAL_TPS"))
                 .map((item) -> item.isBlank() ? null : item).orElseGet(() -> environmentConfig.getString("totalTps")));
@@ -59,9 +66,9 @@ public class EnvironmentConfigLoader {
 
     public Properties getKafkaConsumerProperties(String consumerName) {
         var kafkaConfig = getKafkaProperties();
-        environmentConfig.getConfig("kafka.properties.producers").getConfig(consumerName)
+        environmentConfig.getConfig("kafka.properties.consumers").getConfig(consumerName)
                 .entrySet()
-                .forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue()));
+                .forEach(entry -> kafkaConfig.put(entry.getKey(), entry.getValue().unwrapped()));
         return kafkaConfig;
     }
 
